@@ -6,15 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/signup")
+public class SignupController {
 
-  public LoginController() {
+  public SignupController() {
   }
 
   @GetMapping
-  public String getLoginPage(Model model) {
+  public String getSignupPage(Model model) {
 
-    return "login";
+    return "signup";
+
   }
 }
