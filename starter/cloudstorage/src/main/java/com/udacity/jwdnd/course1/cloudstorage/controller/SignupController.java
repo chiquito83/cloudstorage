@@ -25,6 +25,8 @@ public class SignupController {
   @PostMapping
   public String postSignupPage(@ModelAttribute("signupForm") SignupForm signupForm, Model model) {
 
+    System.out.println(signupForm);
+
     return "signup";
   }
 }
