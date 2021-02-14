@@ -17,4 +17,9 @@ public class LoginController {
 
     return "login";
   }
+
+  public String postLoginPage(Model model) {
+
+    return "login";
+  }
 }

@@ -33,7 +33,7 @@ public class UserService {
 
 
 
-    int n = userMapper.insert(User.hashedAndSalted(user, hashedPassword, encodedSalt));
+    int n = userMapper.insert(User.hashAndSalt(user, hashedPassword, encodedSalt));
 
     System.out.println("Added a user!!!!");
 
