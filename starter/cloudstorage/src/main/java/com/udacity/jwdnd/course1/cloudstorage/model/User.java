@@ -65,4 +65,8 @@ public class User {
   public void setPassword(String password) {
     this.password = password;
   }
+
+  public static User hashedAndSalted(User user, String hashedPassword, String salt) {
+    return new User(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), salt, hashedPassword);
+  }
 }
