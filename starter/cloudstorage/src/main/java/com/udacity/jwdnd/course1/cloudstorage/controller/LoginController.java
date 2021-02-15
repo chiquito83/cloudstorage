@@ -1,9 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.fbb.LoginForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/login")
@@ -13,12 +13,16 @@ public class LoginController {
   }
 
   @GetMapping
-  public String getLoginPage(Model model) {
+  public String getLoginPage(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
+
+    System.out.println("getLoginPage called");
 
     return "login";
   }
 
-  public String postLoginPage(Model model) {
+  @PostMapping
+  public String postLoginPage(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
+
 
     return "login";
   }
