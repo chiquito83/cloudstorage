@@ -69,4 +69,8 @@ public class User {
   public static User hashAndSalt(User user, String hashedPassword, String salt) {
     return new User(user.getUserid(), user.getUsername(), user.getFirstName(), user.getLastName(), salt, hashedPassword);
   }
+
+  public Note createNote(String title, String description) {
+    return new Note(null, this.userid, title, description);
+  }
 }

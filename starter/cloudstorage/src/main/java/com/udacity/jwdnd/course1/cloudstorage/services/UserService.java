@@ -18,6 +18,10 @@ public class UserService {
     this.userMapper = userMapper;
   }
 
+  public User getByUsername(String username) {
+    return userMapper.getUser(username);
+  }
+
   public boolean isUsernameAvailable(String username) {
     return userMapper.getUser(username) == null;
   }
@@ -38,8 +42,6 @@ public class UserService {
     System.out.println("Added a user!!!!");
 
     return n;
-
-
 
   }
 }

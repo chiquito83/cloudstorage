@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-interface NoteMapper {
+public interface NoteMapper {
 
   @Select("SELECT * FROM NOTES WHERE noteid = #{noteid}")
   Note getNote(Long noteid);
