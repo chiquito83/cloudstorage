@@ -10,7 +10,7 @@ public class Note {
   private String title;
   private String description;
 
-  public Note(Long noteid, Long userid, String title, String description) {
+  public Note(Long noteid, String title, String description, Long userid) {
     this.noteid = noteid;
     this.userid = userid;
     this.title = title;

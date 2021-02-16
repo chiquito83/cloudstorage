@@ -71,6 +71,6 @@ public class User {
   }
 
   public Note createNote(String title, String description) {
-    return new Note(null, this.userid, title, description);
+    return new Note(null, title, description, this.userid);
   }
 }

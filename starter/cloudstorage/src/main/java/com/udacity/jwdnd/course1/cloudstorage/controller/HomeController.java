@@ -33,6 +33,10 @@ public class HomeController {
 
     User user = userService.getByUsername(principal.getName());
 
+    if (user == null) {
+      System.out.println("user null, wtf??? that should not happen");
+    }
+
     model.addAttribute("notes", noteService.getNotes(user.getUserid()));
 
 
@@ -47,7 +51,13 @@ public class HomeController {
 
     User user = userService.getByUsername(principal.getName());
 
+    if (user == null) {
+      System.out.println("user null, wtf??? that should not happen");
+    }
+
     Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
+
+    System.out.println("user created a note: " + note);
 
     int r = noteService.createNote(note);
 
