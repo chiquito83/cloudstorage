@@ -31,11 +31,6 @@ public class NoteService {
 
   public List<Note> getNotes(Long userid) {
 
-    List<Note> n = noteMapper.getNotes(userid);
-
-    if (n.size() > 0) {
-      System.out.println("note 0 :   " + n.get(0));
-    }
 
     return noteMapper.getNotes(userid);
   }
