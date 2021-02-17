@@ -10,15 +10,11 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/note")
 public class NoteController {
 
   private NoteService noteService;
@@ -31,7 +27,7 @@ public class NoteController {
     this.credentialsService = credentialsService;
   }
 
-  @PostMapping
+  @PostMapping("/note")
   public String postNote(@ModelAttribute("noteForm") NoteForm noteForm,
                          @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
                          Model model, Principal principal) {
@@ -47,10 +43,30 @@ public class NoteController {
     return "home";
   }
 
-  @DeleteMapping
+  @GetMapping("/deleteNote/{id}")
   public String deleteNote(@ModelAttribute("noteForm") NoteForm noteForm,
                            @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                           Model model, Principal principal) {
+                           Model model, Principal principal,
+                           @PathVariable("id") Long noteId
+                           ) {
+
+    System.out.println("trying to delete a note id: " + noteId );
+
+    User user = userService.getByUsername(principal.getName());
+
+    Note note = noteService.getNote(noteId);
+
+    if (note.getUserid().equals(user.getUserid())) {
+
+      int r = noteService.deleteNote(note.getNoteid());
+      System.out.println("deleted " + r + " rows");
+
+    }
+
+
+
+    model.addAttribute("notes", noteService.getNotes(user.getUserid()));
+    model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
 
 
     return "home";

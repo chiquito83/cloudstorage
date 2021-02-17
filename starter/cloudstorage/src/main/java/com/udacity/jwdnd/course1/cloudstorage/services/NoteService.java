@@ -35,5 +35,11 @@ public class NoteService {
     return noteMapper.getNotes(userid);
   }
 
+  public int deleteNote(Long id) {
+
+    return noteMapper.delete(id);
+
+  }
+
 
 }
