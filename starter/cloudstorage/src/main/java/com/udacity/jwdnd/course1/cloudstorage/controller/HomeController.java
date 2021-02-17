@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.fbb.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.fbb.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -21,23 +23,25 @@ public class HomeController {
 
   NoteService noteService;
   UserService userService;
+  CredentialsService credentialsService;
 
 
-  public HomeController(NoteService noteService, UserService userService) {
+  public HomeController(NoteService noteService, UserService userService, CredentialsService credentialsService) {
     this.noteService = noteService;
     this.userService = userService;
+    this.credentialsService = credentialsService;
   }
 
   @GetMapping
-  public String getHomePage(@ModelAttribute("noteForm") NoteForm noteForm, Model model, Principal principal) { //todo
+  public String getHomePage(@ModelAttribute("noteForm") NoteForm noteForm,
+                            @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
+                            Model model, Principal principal) { //todo
 
     User user = userService.getByUsername(principal.getName());
 
-    if (user == null) {
-      System.out.println("user null, wtf??? that should not happen");
-    }
 
     model.addAttribute("notes", noteService.getNotes(user.getUserid()));
+    model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
 
 
 
@@ -45,25 +49,24 @@ public class HomeController {
     return "home";
   }
 
-  @PostMapping
-  public String postNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model, Principal principal) {
+
+  public String postHome(@ModelAttribute("noteForm") NoteForm noteForm,
+                         @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
+                         Model model, Principal principal) {
 
 
     User user = userService.getByUsername(principal.getName());
 
-    if (user == null) {
-      System.out.println("user null, wtf??? that should not happen");
-    }
+
 
     Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
 
-    System.out.println("user created a note: " + note);
 
     int r = noteService.createNote(note);
 
-    System.out.println(r + " rows added");
 
-    model.addAttribute("notes", noteService.getNotes(user.getUserid()));
+    //model.addAttribute("notes", noteService.getNotes(user.getUserid()));
+    //model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
 
 
     return "home";
