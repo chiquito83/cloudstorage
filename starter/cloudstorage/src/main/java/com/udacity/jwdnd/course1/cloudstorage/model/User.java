@@ -76,7 +76,6 @@ public class User {
 
   public Credentials createCredentials(String url, String username, String password) {
 
-    String key = userid.toString();
-    return new Credentials(null, url, username, password, key, this.getUserid());
+    return new Credentials(null, url, username, password, null, this.getUserid());
   }
 }

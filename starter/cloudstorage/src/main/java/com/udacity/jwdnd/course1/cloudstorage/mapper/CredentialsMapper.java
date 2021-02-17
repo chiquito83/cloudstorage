@@ -18,7 +18,7 @@ public interface CredentialsMapper {
   List<Credentials> getCredentialsList(Long userid);
 
 
-  @Insert("INSERT (url, username, key, password, userid) VALUES (#{url}, #{username}, #{key}, #{password}, #{userid})")
+  @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) VALUES (#{url}, #{username}, #{key}, #{password}, #{userid})")
   @Options(useGeneratedKeys = true, keyProperty = "credentialsid")
   int insert(Credentials credentials);
 }
