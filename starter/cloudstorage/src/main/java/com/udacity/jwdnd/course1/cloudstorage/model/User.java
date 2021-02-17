@@ -73,4 +73,10 @@ public class User {
   public Note createNote(String title, String description) {
     return new Note(null, title, description, this.userid);
   }
+
+  public Credentials createCredentials(String url, String username, String password) {
+
+    String key = userid.toString();
+    return new Credentials(null, url, username, password, key, this.getUserid());
+  }
 }

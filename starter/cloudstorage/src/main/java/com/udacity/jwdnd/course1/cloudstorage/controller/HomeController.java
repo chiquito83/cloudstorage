@@ -50,30 +50,4 @@ public class HomeController {
   }
 
 
-  public String postHome(@ModelAttribute("noteForm") NoteForm noteForm,
-                         @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                         Model model, Principal principal) {
-
-
-    User user = userService.getByUsername(principal.getName());
-
-
-
-    Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
-
-
-    int r = noteService.createNote(note);
-
-
-    //model.addAttribute("notes", noteService.getNotes(user.getUserid()));
-    //model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
-
-
-    return "home";
-  }
-
-
-
-
-
 }
