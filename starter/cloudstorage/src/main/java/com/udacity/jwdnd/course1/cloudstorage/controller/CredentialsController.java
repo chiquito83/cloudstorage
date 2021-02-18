@@ -10,14 +10,13 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/credentials")
 public class CredentialsController {
 
   private CredentialsService credentialsService;
@@ -31,10 +30,12 @@ public class CredentialsController {
     this.noteService = noteService;
   }
 
-  @PostMapping
-  public String postCredentials(@ModelAttribute("noteForm") NoteForm noteForm,
-          @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                                Model model, Principal principal ) {
+  @PostMapping("/credentials")
+  public void postCredentials(@ModelAttribute("noteForm") NoteForm noteForm,
+                              @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
+                              Model model, Principal principal,
+                              HttpServletResponse response
+                              ) throws IOException {
 
     System.out.println("post credentials called");
 
@@ -47,11 +48,28 @@ public class CredentialsController {
 
     System.out.println("added " + r + " credential");
 
-    model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
-    model.addAttribute("notes", noteService.getNotes(user.getUserid()));
 
-    return "home";
+    response.sendRedirect("/home");
   }
+
+  @GetMapping("deleteCredentials/{id}")
+  public void deleteCredentials(Model model,
+                                Principal principal,
+                                HttpServletResponse response,
+                                @PathVariable("id") Long credentialsId) throws IOException {
+
+    User user = userService.getByUsername(principal.getName());
+
+    Credentials credentials = credentialsService.getById(credentialsId);
+
+    if (credentials.getUserid().equals(user.getUserid())) {
+      credentialsService.delete(credentialsId);
+    }
+
+    response.sendRedirect("/home");
+
+  }
+
 }
 
 

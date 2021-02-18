@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -28,27 +30,55 @@ public class NoteController {
   }
 
   @PostMapping("/note")
-  public String postNote(@ModelAttribute("noteForm") NoteForm noteForm,
+  public void postNote(@ModelAttribute("noteForm") NoteForm noteForm,
                          @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                         Model model, Principal principal) {
+                         Model model, Principal principal,
+                         HttpServletResponse response
+                       ) throws IOException {
 
     User user = userService.getByUsername(principal.getName());
-    Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
 
-    int r = noteService.createNote(note);
+    Note existingNote = noteService.getNote(noteForm.getId());
 
-    model.addAttribute("notes", noteService.getNotes(user.getUserid()));
-    model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
 
-    return "home";
+    if (existingNote != null) {
+
+      if (user.getUserid().equals(existingNote.getUserid())) {
+        Note updatedNote = new Note(noteForm.getId(), noteForm.getTitle(), noteForm.getDescription(), existingNote.getUserid());
+        noteService.update(updatedNote);
+      }
+
+    }
+
+    else {
+
+      Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
+
+      int r = noteService.createNote(note);
+
+    }
+
+
+
+
+    response.sendRedirect("/home");
+
+
+  }
+
+  @GetMapping("editNote/{id}")
+  public void editNote(@ModelAttribute("noteForm") NoteForm noteForm,
+                       Model model,
+                       Principal principal) { //todo maybe not needed
+
   }
 
   @GetMapping("/deleteNote/{id}")
-  public String deleteNote(@ModelAttribute("noteForm") NoteForm noteForm,
-                           @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
+  public void deleteNote(@ModelAttribute("noteForm") NoteForm noteForm,
                            Model model, Principal principal,
-                           @PathVariable("id") Long noteId
-                           ) {
+                           @PathVariable("id") Long noteId,
+                         HttpServletResponse response
+                           ) throws IOException {
 
     System.out.println("trying to delete a note id: " + noteId );
 
@@ -63,13 +93,7 @@ public class NoteController {
 
     }
 
-
-
-    model.addAttribute("notes", noteService.getNotes(user.getUserid()));
-    model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
-
-
-    return "home";
+    response.sendRedirect("/home");
 
   }
 

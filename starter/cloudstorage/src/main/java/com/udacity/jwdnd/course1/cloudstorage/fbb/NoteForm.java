@@ -2,10 +2,13 @@ package com.udacity.jwdnd.course1.cloudstorage.fbb;
 
 public class NoteForm {
 
+  private Long id;
+
   private String title;
   private String description;
 
-  public NoteForm(String title, String description) {
+  public NoteForm(Long id, String title, String description) {
+    this.id = id;
     this.title = title;
     this.description = description;
   }
@@ -24,6 +27,14 @@ public class NoteForm {
 
   public String getDescription() {
     return description;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   @Override

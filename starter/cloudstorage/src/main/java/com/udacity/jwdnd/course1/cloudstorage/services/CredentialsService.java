@@ -42,6 +42,14 @@ public class CredentialsService {
     return r;
   }
 
+  public Credentials getById(Long credentialsId) {
+    return credentialsMapper.getCredentials(credentialsId);
+  }
+
+  public int delete(Long credentialsId) {
+    return credentialsMapper.delete(credentialsId);
+  }
+
   public List<Credentials> getCredentials(Long userid) {
     List<Credentials> credentialsList = credentialsMapper.getCredentialsList(userid);
 

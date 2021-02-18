@@ -41,5 +41,9 @@ public class NoteService {
 
   }
 
+  public int update(Note note) {
+    return noteMapper.update(note.getTitle(), note.getDescription(), note.getNoteid());
+  }
+
 
 }

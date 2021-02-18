@@ -77,7 +77,13 @@
                                 <tbody>
                                     <tr th:each="note : ${notes}">
                                         <td>
-                                            <button type="button" class="btn btn-success">Edit</button>
+                                            <button type="button" class="btn btn-success"
+                                                    th:noteId = "${note.getNoteid()}"
+                                                    th:title = "${note.getTitle()}"
+                                                    th:description = "${note.getDescription()}"
+                                                    th:onclick="javascript:showNoteModal(this.getAttribute('noteId'),
+                                                    this.getAttribute('title'), this.getAttribute('description')
+                                                    );">Edit</button>
                                             <a class="btn btn-danger"  th:href="@{/deleteNote/{noteId} (noteId=${note.noteid})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.title}">Example Note Title</th>
@@ -98,7 +104,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <form action="#" method="POST" th:object="${noteForm}" th:action="@{/note}">
-                                            <input type="hidden" name="noteId" id="note-id">
+                                            <input type="hidden" th:field="*{id}" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
                                                 <input type="text" th:field="*{title}" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required>
