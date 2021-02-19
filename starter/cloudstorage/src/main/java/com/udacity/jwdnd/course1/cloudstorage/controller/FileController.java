@@ -61,6 +61,25 @@ public class FileController {
 
   }
 
+  @GetMapping("deleteFile/{id}")
+  public void deleteFile(@PathVariable("id") Long id,
+                         Principal principal,
+                         Model model,
+                         HttpServletResponse response
+                         ) throws IOException {
+
+    User user = userService.getByUsername(principal.getName());
+
+    File file = fileService.readFile(id);
+
+    if (file.getUserid().equals(user.getUserid())) {
+      fileService.deleteFile(file.getFileid());
+    }
+
+    response.sendRedirect("/home");
+
+  }
+
   @PostMapping("/file")
   public void uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile,
                          Principal principal,

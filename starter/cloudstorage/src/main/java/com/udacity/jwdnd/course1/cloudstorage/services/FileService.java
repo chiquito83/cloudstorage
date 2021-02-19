@@ -22,6 +22,10 @@ public class FileService {
 
   }
 
+  public int deleteFile(Long id) {
+    return fileMapper.deleteFile(id);
+  }
+
   public File readFile(Long id) {
     return fileMapper.getFile(id);
   }
