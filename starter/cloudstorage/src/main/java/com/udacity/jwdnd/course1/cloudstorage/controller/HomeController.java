@@ -5,6 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.fbb.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,15 @@ public class HomeController {
   NoteService noteService;
   UserService userService;
   CredentialsService credentialsService;
+  FileService fileService;
 
 
-  public HomeController(NoteService noteService, UserService userService, CredentialsService credentialsService) {
+  public HomeController(NoteService noteService, UserService userService,
+                        CredentialsService credentialsService, FileService fileService) {
     this.noteService = noteService;
     this.userService = userService;
     this.credentialsService = credentialsService;
+    this.fileService = fileService;
   }
 
   @GetMapping
@@ -42,6 +46,7 @@ public class HomeController {
 
     model.addAttribute("notes", noteService.getNotes(user.getUserid()));
     model.addAttribute("credentialsList", credentialsService.getCredentials(user.getUserid()));
+    model.addAttribute("files", fileService.getFiles(user.getUserid()));
 
 
 

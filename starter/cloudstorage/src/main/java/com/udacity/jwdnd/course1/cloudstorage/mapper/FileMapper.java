@@ -18,7 +18,7 @@ public interface FileMapper {
   List<File> getAllFiles(Long userid);
 
   @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
-          " VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userid}, #{filedata})")
+          " VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userid}, #{fileData})")
   @Options(useGeneratedKeys = true, keyProperty = "fileid")
   int saveFile(File file);
 }

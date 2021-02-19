@@ -6,13 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController {
 
   public LoginController() {
   }
 
-  @GetMapping
+  @GetMapping("/login")
   public String getLoginPage(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
 
     System.out.println("getLoginPage called");
@@ -20,10 +19,15 @@ public class LoginController {
     return "login";
   }
 
-  @PostMapping
+  @PostMapping("/login")
   public String postLoginPage(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
 
 
     return "login";
+  }
+
+  @GetMapping("logout")
+  public void logout() { //todo
+
   }
 }
