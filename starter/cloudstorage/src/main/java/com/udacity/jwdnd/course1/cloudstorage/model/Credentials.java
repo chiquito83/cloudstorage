@@ -1,7 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
 public class Credentials {
-  private Long credentialsid;
+  private Long credentialid;
 
   private String url;
   private String username;
@@ -12,7 +12,7 @@ public class Credentials {
   private Long userid;
 
   public Credentials(Long id, String url, String username, String password, String key, Long userid) {
-    this.credentialsid = id;
+    this.credentialid = id;
     this.url = url;
     this.username = username;
     this.password = password;
@@ -20,9 +20,10 @@ public class Credentials {
     this.userid = userid;
   }
 
-  public Long getCredentialsid() {
-    return credentialsid;
+  public Long getCredentialid() {
+    return credentialid;
   }
+
 
   public String getUrl() {
     return url;
@@ -52,8 +53,8 @@ public class Credentials {
     this.key = key;
   }
 
-  public void setCredentialsid(Long credentialsid) {
-    this.credentialsid = credentialsid;
+  public void setCredentialid(Long credentialid) {
+    this.credentialid = credentialid;
   }
 
   public void setUrl(String url) {
@@ -71,7 +72,7 @@ public class Credentials {
   @Override
   public String toString() {
     return "Credentials{" +
-            "id=" + credentialsid +
+            "id=" + credentialid +
             ", url='" + url + '\'' +
             ", username='" + username + '\'' +
             ", password='" + password + '\'' +
