@@ -1,5 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
+import java.util.Arrays;
+
 public class File {
 
   private Long fileid;
@@ -64,5 +66,16 @@ public class File {
 
   public void setFileData(byte[] fileData) {
     this.fileData = fileData;
+  }
+
+  @Override
+  public String toString() {
+    return "File{" +
+            "fileid=" + fileid +
+            ", fileName='" + fileName + '\'' +
+            ", contentType='" + contentType + '\'' +
+            ", fileSize='" + fileSize + '\'' +
+            ", userid=" + userid +
+            '}';
   }
 }

@@ -4,8 +4,13 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +28,40 @@ public class FileController {
   public FileController(FileService fileService, UserService userService) {
     this.fileService = fileService;
     this.userService = userService;
+  }
+
+  @GetMapping("/file/{id}")
+  public ResponseEntity viewFile(@PathVariable("id") Long id,
+                       Principal principal,
+                       Model model,
+                       HttpServletResponse response
+                       ) throws IOException {
+
+    User user = userService.getByUsername(principal.getName());
+
+    File file = fileService.readFile(id);
+
+    System.out.println(file);
+
+    if (file.getUserid().equals(user.getUserid())) {
+
+      String fileName = file.getFileName();
+      MediaType mediaType = MediaType.parseMediaType(file.getContentType());
+
+      String contentDisposition = "Content-Disposition: attachment; filename=\"" + fileName + "\"";
+
+      return ResponseEntity.ok()
+              .contentType(mediaType)
+              .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+              .body(file.getFileData());
+
+    }
+
+
+    response.sendRedirect("/home");
+
+    return null;
+
   }
 
   @PostMapping("/file")
