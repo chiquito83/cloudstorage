@@ -41,12 +41,38 @@ public class CredentialsController {
 
     User user = userService.getByUsername(principal.getName());
 
-    Credentials credentials = user.createCredentials(credentialsForm.getUrl(),
-            credentialsForm.getUsername(), credentialsForm.getPassword());
+    Credentials existingCredentials = credentialsService.getById(credentialsForm.getId());
 
-    int r = credentialsService.createCredentials(credentials);
+    System.out.println("postCredentials, existing : " + existingCredentials);
 
-    System.out.println("added " + r + " credential");
+    if (existingCredentials != null) {
+
+      System.out.println("this should be called only when updating");
+
+      if (existingCredentials.getUserid().equals(user.getUserid())) {
+        Credentials updated = new Credentials(existingCredentials.getCredentialid(),
+                credentialsForm.getUrl(), credentialsForm.getUsername(),
+                credentialsForm.getPassword(), existingCredentials.getKey(), user.getUserid()
+                 );
+
+        credentialsService.delete(credentialsForm.getId());
+        credentialsService.createCredentials(updated);
+      }
+
+    }
+
+    else {
+
+      Credentials credentials = user.createCredentials(credentialsForm.getUrl(),
+              credentialsForm.getUsername(), credentialsForm.getPassword());
+
+      int r = credentialsService.createCredentials(credentials);
+
+      System.out.println("added " + r + " credential");
+
+    }
+
+
 
 
     response.sendRedirect("/home");

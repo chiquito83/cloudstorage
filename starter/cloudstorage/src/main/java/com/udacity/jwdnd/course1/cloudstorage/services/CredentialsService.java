@@ -42,16 +42,40 @@ public class CredentialsService {
     return r;
   }
 
+  public int update(Credentials credentials) {
+    return credentialsMapper.update(credentials.getCredentialid(),
+            credentials.getUrl(), credentials.getUsername(), credentials.getPassword());
+  }
+
   public Credentials getById(Long credentialsId) {
-    return credentialsMapper.getCredentials(credentialsId);
+
+    Credentials credentials = credentialsMapper.getCredentials(credentialsId);
+
+    if (credentials == null) {
+      return null;
+    }
+
+    System.out.println("returned cred by getById method : " +credentials);
+
+    return decrypt(credentials) ;
   }
 
   public int delete(Long credentialsId) {
     return credentialsMapper.delete(credentialsId);
   }
 
+
+
   public List<Credentials> getCredentials(Long userid) {
     List<Credentials> credentialsList = credentialsMapper.getCredentialsList(userid);
+
+    if (credentialsList.size() == 0) {
+      return credentialsList;
+    }
+
+
+
+    System.out.println("Returned first item : " + credentialsList.get(0));
 
 
     return credentialsList.stream()
