@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
@@ -28,7 +31,10 @@ public class SignupController {
   }
 
   @PostMapping
-  public String postSignupPage(@ModelAttribute("signupForm") SignupForm signupForm, Model model) {
+  public String postSignupPage(@ModelAttribute("signupForm") SignupForm signupForm,
+                               Model model,
+                               HttpServletResponse response
+                               ) throws IOException {
 
     System.out.println(signupForm);
 
@@ -55,11 +61,13 @@ public class SignupController {
 
     if (noErrors) {
       model.addAttribute("signupSuccess", true);
+      model.addAttribute("successMessage", "Registration successful. Please login.");
+      response.sendRedirect("/login");
     }
     else {
-      model.addAttribute("signupError", error);
+      model.addAttribute("errorMessage", error);
+      model.addAttribute("signupSuccess", false);
     }
-
 
 
 

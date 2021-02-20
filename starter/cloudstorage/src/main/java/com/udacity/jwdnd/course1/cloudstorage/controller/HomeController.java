@@ -39,7 +39,7 @@ public class HomeController {
   @GetMapping
   public String getHomePage(@ModelAttribute("noteForm") NoteForm noteForm,
                             @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                            Model model, Principal principal) { //todo
+                            Model model, Principal principal) {
 
     User user = userService.getByUsername(principal.getName());
 
