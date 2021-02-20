@@ -14,7 +14,6 @@ public class LoginController {
   @GetMapping("/login")
   public String getLoginPage(@ModelAttribute("loginForm") LoginForm loginForm, Model model) {
 
-    System.out.println("getLoginPage called");
 
     return "login";
   }
@@ -26,8 +25,5 @@ public class LoginController {
     return "login";
   }
 
-  @GetMapping("logout")
-  public void logout() { //todo
 
-  }
 }
