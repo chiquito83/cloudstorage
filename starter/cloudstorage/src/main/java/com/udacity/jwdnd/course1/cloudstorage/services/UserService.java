@@ -39,7 +39,6 @@ public class UserService {
 
     int n = userMapper.insert(User.hashAndSalt(user, hashedPassword, encodedSalt));
 
-    System.out.println("Added a user!!!!");
 
     return n;
 

@@ -37,7 +37,6 @@ public class CredentialsService {
 
     int r = credentialsMapper.insert(credentials);
 
-    System.out.println("inserted credentials " + credentials.toString());
 
     return r;
   }
@@ -55,7 +54,6 @@ public class CredentialsService {
       return null;
     }
 
-    System.out.println("returned cred by getById method : " +credentials);
 
     return decrypt(credentials) ;
   }
@@ -74,8 +72,6 @@ public class CredentialsService {
     }
 
 
-
-    System.out.println("Returned first item : " + credentialsList.get(0));
 
 
     return credentialsList.stream()

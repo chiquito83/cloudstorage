@@ -19,7 +19,6 @@ public class NoteService {
   public int createNote(Note note) {
     int i =  noteMapper.insert(note);
 
-    System.out.println("added note:" + getNote(note.getNoteid()));
 
     return i;
 
