@@ -31,6 +31,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+
 	}
 
 	@AfterEach
@@ -80,7 +81,7 @@ class CloudStorageApplicationTests {
 
 		loginPage.loginUser(username, password);
 
-		assertEquals("Home", driver.getTitle()); //todo finish
+		assertEquals("Home", driver.getTitle());
 
 		HomePage homePage = new HomePage(driver);
 
@@ -95,8 +96,41 @@ class CloudStorageApplicationTests {
 	// Write a Selenium test that logs in an existing user,
 	// creates a note and verifies that the note details are visible in the note list.
 	@Test
-	public void loginCreateNote() {
-		throw new UnsupportedOperationException();
+	public void loginCreateNote() throws InterruptedException {
+
+
+		driver.get(BASE_URL + port + "/signup");
+
+		String firstName = "Tom";
+		String lastName = "Cruise";
+		String username = "seleniumUser2";
+		String password = "seleniumPass2";
+
+		SignupPage signupPage = new SignupPage(driver);
+
+
+		signupPage.registerUser(firstName, lastName, username, password);
+
+		driver.get(BASE_URL + port + "/login");
+
+		LoginPage loginPage = new LoginPage(driver);
+
+		loginPage.loginUser(username, password);
+
+		HomePage homePage = new HomePage(driver);
+
+		String title = "Some Note";
+		String description = "Description";
+
+		homePage.addNote(title, description);
+
+
+		homePage.clickNotesTab();
+
+		Thread.sleep(2000);
+
+		assertEquals(title, homePage.getNoteTitle());
+
 	}
 
 
@@ -120,8 +154,48 @@ class CloudStorageApplicationTests {
 	// creates a credential and verifies that
 	// the credential details are visible in the credential list.
 	@Test
-	public void loginExistingCreateCredential() {
-		throw new UnsupportedOperationException();
+	public void loginExistingCreateCredential() throws InterruptedException {
+
+
+		driver.get(BASE_URL + port + "/signup");
+
+		String firstName = "John";
+		String lastName = "Smith";
+		String username = "john";
+		String password = "mypass";
+
+		SignupPage signupPage = new SignupPage(driver);
+
+
+		signupPage.registerUser(firstName, lastName, username, password);
+
+		driver.get(BASE_URL + port + "/login");
+
+		LoginPage loginPage = new LoginPage(driver);
+
+		loginPage.loginUser(username, password);
+
+		HomePage homePage = new HomePage(driver);
+
+		String url = "udacity.com";
+		String credUsername = "USER";
+		String credPass = "PASS";
+
+		//homePage.clickCredentialsTab();
+
+		Thread.sleep(3000);
+
+
+		homePage.addCredentials(url, credUsername, credPass);
+
+		Thread.sleep(3000);
+
+
+		homePage.clickCredentialsTab();
+
+		Thread.sleep(3000);
+
+		assertEquals(url, homePage.getCredentialsUrl());
 	}
 
 	// Write a Selenium test that logs in an existing user with existing credentials,

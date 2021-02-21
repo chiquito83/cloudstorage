@@ -37,6 +37,8 @@ public class CredentialsService {
 
     int r = credentialsMapper.insert(credentials);
 
+    System.out.println("added credentials : " + credentials);
+
 
     return r;
   }
