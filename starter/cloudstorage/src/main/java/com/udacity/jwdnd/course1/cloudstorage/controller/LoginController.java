@@ -20,10 +20,21 @@ public class LoginController {
                              Model model,
                              HttpServletRequest request) {
 
+    boolean redirectedAfterSignup = false;
 
-    boolean redirectedAfterSignup = Arrays.stream(request
-            .getCookies()).anyMatch(c -> (c.getName()
-            .equals("redirectMessage") && c.getValue().equals("RS")));
+
+    try {
+
+              redirectedAfterSignup = Arrays.stream(request
+              .getCookies()).anyMatch(c -> (c.getName()
+              .equals("redirectMessage") && c.getValue().equals("RS")));
+
+    }
+    catch(NullPointerException e) {
+      // todo temp fix to catch npe when login page called directly, gonna fix later
+
+    }
+
 
 
 
