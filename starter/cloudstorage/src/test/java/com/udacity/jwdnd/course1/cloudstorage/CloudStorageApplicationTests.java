@@ -1,7 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.pom.HomePage;
+import com.udacity.jwdnd.course1.cloudstorage.pom.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.pom.SignupPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +19,7 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private String BASE_URL= "http://localhost:";
+
 
 	private WebDriver driver;
 
@@ -44,10 +49,10 @@ class CloudStorageApplicationTests {
 	//Write a Selenium test that verifies that the home page is not accessible without logging in.
 	@Test
 	public void homePageNotAccessibleWithoutLogin() {
-		driver.get(BASE_URL + this.port + "/home");
+		driver.get(BASE_URL + port + "/home");
 
-		Assertions.assertNotEquals("Home", driver.getTitle());
-		Assertions.assertEquals("Login", driver.getTitle());
+		assertNotEquals("Home", driver.getTitle());
+		assertEquals("Login", driver.getTitle());
 
 	}
 
@@ -57,7 +62,32 @@ class CloudStorageApplicationTests {
 	@Test
 	public void signupLoginAndLogout() {
 
-		throw new UnsupportedOperationException();
+		driver.get(BASE_URL + port + "/signup");
+
+		String firstName = "Jeff";
+		String lastName = "Brown";
+		String username = "seleniumUser";
+		String password = "seleniumPass";
+
+		SignupPage signupPage = new SignupPage(driver);
+
+
+		signupPage.registerUser(firstName, lastName, username, password);
+
+		driver.get(BASE_URL + port + "/login");
+
+		LoginPage loginPage = new LoginPage(driver);
+
+		loginPage.loginUser(username, password);
+
+		assertEquals("Home", driver.getTitle()); //todo finish
+
+		HomePage homePage = new HomePage(driver);
+
+		homePage.logout();
+
+		assertEquals("Login", driver.getTitle());
+
 
 
 	}
