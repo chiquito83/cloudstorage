@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -62,6 +63,13 @@ public class SignupController {
     if (noErrors) {
       model.addAttribute("signupSuccess", true);
       model.addAttribute("successMessage", "Registration successful. Please login.");
+
+      Cookie cookie = new Cookie("redirectMessage", "RS");
+
+      cookie.setMaxAge(5);
+
+
+      response.addCookie(cookie);
       response.sendRedirect("/login");
     }
     else {

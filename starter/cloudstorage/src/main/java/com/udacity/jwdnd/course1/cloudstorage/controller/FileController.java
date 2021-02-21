@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
@@ -87,29 +88,25 @@ public class FileController {
                          HttpServletResponse response
                          ) throws IOException {
 
-    System.out.println("inside uploadFile method");
 
     User user = userService.getByUsername(principal.getName());
 
-    System.out.println("user : " + user.getUsername());
 
     try {
       File file = fromMultipartFile(multipartFile, user);
 
-      System.out.println("received file");
 
       fileService.addFile(file);
 
-      System.out.println("added file to database");
 
     } catch (IOException e) {
-      System.out.println("something went wrong");
-      e.printStackTrace();
+
+      Cookie cookie = new Cookie("redirectMessage", "FILE_ERROR");
+      cookie.setMaxAge(5);
+      response.addCookie(cookie);
     }
 
     response.sendRedirect("/home");
-
-
 
 
   }

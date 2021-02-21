@@ -37,17 +37,14 @@ public class CredentialsController {
                               HttpServletResponse response
                               ) throws IOException {
 
-    System.out.println("post credentials called");
 
     User user = userService.getByUsername(principal.getName());
 
     Credentials existingCredentials = credentialsService.getById(credentialsForm.getId());
 
-    System.out.println("postCredentials, existing : " + existingCredentials);
 
     if (existingCredentials != null) {
 
-      System.out.println("this should be called only when updating");
 
       if (existingCredentials.getUserid().equals(user.getUserid())) {
         Credentials updated = new Credentials(existingCredentials.getCredentialid(),
@@ -68,7 +65,6 @@ public class CredentialsController {
 
       int r = credentialsService.createCredentials(credentials);
 
-      System.out.println("added " + r + " credential");
 
     }
 

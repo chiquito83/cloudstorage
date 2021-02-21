@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -39,9 +41,16 @@ public class HomeController {
   @GetMapping
   public String getHomePage(@ModelAttribute("noteForm") NoteForm noteForm,
                             @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
-                            Model model, Principal principal) {
+                            Model model, Principal principal, HttpServletRequest request) {
 
     User user = userService.getByUsername(principal.getName());
+
+    Boolean errorUploadingFile = Arrays.stream(request.getCookies())
+            .anyMatch(c -> c.getName().equals("redirectMessage") && c.getValue().equals("FILE_ERROR"));
+
+    if (errorUploadingFile) {
+      model.addAttribute("fileError", true);
+    }
 
 
     model.addAttribute("notes", noteService.getNotes(user.getUserid()));
