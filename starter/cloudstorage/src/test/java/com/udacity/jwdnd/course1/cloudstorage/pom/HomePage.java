@@ -41,6 +41,12 @@ public class HomePage {
   @FindBy(id="noteTitle")
   private WebElement noteTitleElement;
 
+  @FindBy(linkText = "Delete")
+  private WebElement deleteNoteButton;
+
+  @FindBy(className = "btn-success")
+  private WebElement editNoteButton;
+
   // credentials
 
   @FindBy(id="addCredentialButton")
@@ -61,6 +67,12 @@ public class HomePage {
   @FindBy(id="credentialSubmit")
   private WebElement submitCredentialsButton;
 
+  @FindBy(linkText = "Delete")
+  private WebElement deleteCredentialsButton;
+
+  @FindBy(className = "btn-success")
+  private WebElement editCredentialsButton;
+
 
 
   public HomePage(WebDriver webDriver) {
@@ -78,6 +90,19 @@ public class HomePage {
 
   }
 
+  public void editCredentialsChangeUrl(String url) {
+    js.executeScript("arguments[0].click();", editCredentialsButton);
+    js.executeScript("arguments[0].value='" + url + "';", credentialsInputUrl);
+    js.executeScript("arguments[0].click();", submitCredentialsButton);
+  }
+
+  public void editNote(String title) {
+    js.executeScript("arguments[0].click();", editNoteButton);
+    js.executeScript("arguments[0].value='" + title + "';", noteTitleInput );
+    js.executeScript("arguments[0].click();", submitNoteButton);
+
+  }
+
 
   public void addNote(String title, String description) {
 
@@ -87,6 +112,16 @@ public class HomePage {
     js.executeScript("arguments[0].value='" + description + "';", noteDescriptionInput);
     js.executeScript("arguments[0].click();", submitNoteButton);
 
+  }
+
+  public void deleteNote() {
+    deleteNoteButton.click();
+
+
+  }
+
+  public void deleteCredentials() {
+    deleteCredentialsButton.click();
   }
 
   public void clickNotesTab() {
