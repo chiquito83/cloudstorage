@@ -78,4 +78,14 @@ public class User {
 
     return new Credentials(null, url, username, password, null, this.getUserid());
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "userid=" + userid +
+            ", username='" + username + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            '}';
+  }
 }
