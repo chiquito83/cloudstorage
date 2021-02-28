@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -48,7 +47,6 @@ public class SignupController {
       noErrors = false;
       redirectAttributes.addFlashAttribute("error", Message.SIGNUP_USER_ALREADY_EXISTS.getText());
 
-      System.out.println("USER ALREADY EXISTS");
     }
 
     if (noErrors) {
@@ -70,7 +68,7 @@ public class SignupController {
 
 
 
-      return "redirect:/signup";
+      return "redirect:/login";
 
 
     }
