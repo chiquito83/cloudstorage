@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -34,18 +35,20 @@ public class SignupController {
   @PostMapping
   public String postSignupPage(@ModelAttribute("signupForm") SignupForm signupForm,
                                Model model,
-                               HttpServletResponse response
+                               HttpServletResponse response,
+                               RedirectAttributes redirectAttributes
                                ) throws IOException {
 
     System.out.println(signupForm);
 
-    String error = null;
 
     boolean noErrors = true;
 
     if (!userService.isUsernameAvailable(signupForm.getUsername())) {
-      error = "The username already exists";
       noErrors = false;
+      redirectAttributes.addFlashAttribute("error", Message.SIGNUP_USER_ALREADY_EXISTS.getText());
+
+      System.out.println("USER ALREADY EXISTS");
     }
 
     if (noErrors) {
@@ -55,30 +58,30 @@ public class SignupController {
       int rowsAdded = userService.createUser(user);
 
       if (rowsAdded < 1) {
-        error = "There was an error signing you up";
+        redirectAttributes.addFlashAttribute("error", Message.SIGNUP_OTHER_ERROR.getText());
         noErrors = false;
       }
     }
 
     if (noErrors) {
-      model.addAttribute("signupSuccess", true);
-      model.addAttribute("successMessage", "Registration successful. Please login.");
-
-      Cookie cookie = new Cookie("redirectMessage", "RS");
-
-      cookie.setMaxAge(5);
 
 
-      response.addCookie(cookie);
-      response.sendRedirect("/login");
+      redirectAttributes.addFlashAttribute("success", Message.SIGNUP_SUCCESS.getText());
+
+
+
+      return "redirect:/signup";
+
+
     }
     else {
-      model.addAttribute("errorMessage", error);
-      model.addAttribute("signupSuccess", false);
+
     }
 
 
 
-    return "signup";
+    return "redirect:/signup";
+
+
   }
 }
