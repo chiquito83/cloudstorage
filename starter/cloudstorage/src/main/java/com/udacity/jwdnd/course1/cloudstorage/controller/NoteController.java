@@ -10,6 +10,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,10 +30,11 @@ public class NoteController {
   }
 
   @PostMapping("/note")
-  public void postNote(@ModelAttribute("noteForm") NoteForm noteForm,
+  public String postNote(@ModelAttribute("noteForm") NoteForm noteForm,
                          @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
                          Model model, Principal principal,
-                         HttpServletResponse response
+                         HttpServletResponse response,
+                         RedirectAttributes redirectAttributes
                        ) throws IOException {
 
     User user = userService.getByUsername(principal.getName());
@@ -44,7 +46,14 @@ public class NoteController {
 
       if (user.getUserid().equals(existingNote.getUserid())) {
         Note updatedNote = new Note(noteForm.getId(), noteForm.getTitle(), noteForm.getDescription(), existingNote.getUserid());
-        noteService.update(updatedNote);
+        int rows = noteService.update(updatedNote);
+
+        if (rows > 0) {
+          redirectAttributes.addFlashAttribute("success", Message.NOTE_UPDATED);
+        }
+        else {
+          redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+        }
       }
 
     }
@@ -55,12 +64,19 @@ public class NoteController {
 
       int r = noteService.createNote(note);
 
+      if (r == 1) {
+        redirectAttributes.addFlashAttribute("success", Message.NOTE_ADDED.getText());
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR.getText());
+      }
+
     }
 
 
 
 
-    response.sendRedirect("/home");
+    return "redirect:/home";
 
 
   }
