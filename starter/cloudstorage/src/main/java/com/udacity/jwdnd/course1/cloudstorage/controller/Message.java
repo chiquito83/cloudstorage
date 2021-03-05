@@ -13,7 +13,7 @@ public enum Message {
 
   NOTE_ADDED("Your note was added."),
   NOTE_ALREADY_EXISTS("Note with this title already exists."),
-  NOTE_ERROR("Something went wrong and we couldn't add your note."),
+  NOTE_ERROR("Something went wrong and we couldn't add, edit or delete your note."),
   NOTE_UPDATED("Your note was updated"),
   NOTE_DELETED("Your note was deleted"),
 

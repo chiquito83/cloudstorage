@@ -35,7 +35,7 @@ public class NoteController {
                          Model model, Principal principal,
                          HttpServletResponse response,
                          RedirectAttributes redirectAttributes
-                       ) throws IOException {
+  ) throws IOException {
 
     User user = userService.getByUsername(principal.getName());
 
@@ -49,16 +49,13 @@ public class NoteController {
         int rows = noteService.update(updatedNote);
 
         if (rows > 0) {
-          redirectAttributes.addFlashAttribute("success", Message.NOTE_UPDATED);
-        }
-        else {
-          redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+          redirectAttributes.addFlashAttribute("success", Message.NOTE_UPDATED.getText());
+        } else {
+          redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR.getText());
         }
       }
 
-    }
-
-    else {
+    } else {
 
       Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
 
@@ -66,14 +63,11 @@ public class NoteController {
 
       if (r == 1) {
         redirectAttributes.addFlashAttribute("success", Message.NOTE_ADDED.getText());
-      }
-      else {
+      } else {
         redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR.getText());
       }
 
     }
-
-
 
 
     return "redirect:/home";
@@ -81,21 +75,16 @@ public class NoteController {
 
   }
 
-  @GetMapping("editNote/{id}")
-  public void editNote(@ModelAttribute("noteForm") NoteForm noteForm,
-                       Model model,
-                       Principal principal) { //todo maybe not needed
 
-  }
 
   @GetMapping("/deleteNote/{id}")
-  public void deleteNote(@ModelAttribute("noteForm") NoteForm noteForm,
-                           Model model, Principal principal,
-                           @PathVariable("id") Long noteId,
-                         HttpServletResponse response
-                           ) throws IOException {
+  public String deleteNote(@ModelAttribute("noteForm") NoteForm noteForm,
+                         Model model, Principal principal,
+                         @PathVariable("id") Long noteId,
+                         HttpServletResponse response,
+                         RedirectAttributes redirectAttributes
+  ) throws IOException {
 
-    System.out.println("trying to delete a note id: " + noteId );
 
     User user = userService.getByUsername(principal.getName());
 
@@ -104,11 +93,22 @@ public class NoteController {
     if (note.getUserid().equals(user.getUserid())) {
 
       int r = noteService.deleteNote(note.getNoteid());
-      System.out.println("deleted " + r + " rows");
+
+      if (r > 0) {
+        redirectAttributes.addFlashAttribute("success", Message.NOTE_DELETED);
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+      }
 
     }
+    else {
+      redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+    }
 
-    response.sendRedirect("/home");
+
+
+    return "redirect:/home";
 
   }
 
