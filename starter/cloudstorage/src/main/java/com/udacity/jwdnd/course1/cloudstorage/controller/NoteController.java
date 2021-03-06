@@ -35,7 +35,7 @@ public class NoteController {
                          Model model, Principal principal,
                          HttpServletResponse response,
                          RedirectAttributes redirectAttributes
-  ) throws IOException {
+  )  {
 
     User user = userService.getByUsername(principal.getName());
 

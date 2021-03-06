@@ -11,6 +11,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,10 +32,11 @@ public class CredentialsController {
   }
 
   @PostMapping("/credentials")
-  public void postCredentials(@ModelAttribute("noteForm") NoteForm noteForm,
+  public String postCredentials(@ModelAttribute("noteForm") NoteForm noteForm,
                               @ModelAttribute("credentialsForm") CredentialsForm credentialsForm,
                               Model model, Principal principal,
-                              HttpServletResponse response
+                              HttpServletResponse response,
+                                RedirectAttributes redirectAttributes
                               ) throws IOException {
 
 
@@ -52,8 +54,19 @@ public class CredentialsController {
                 credentialsForm.getPassword(), existingCredentials.getKey(), user.getUserid()
                  );
 
-        credentialsService.delete(credentialsForm.getId());
-        credentialsService.createCredentials(updated);
+        int r = credentialsService.delete(credentialsForm.getId());
+        int rr = credentialsService.createCredentials(updated);
+
+        if (r + rr > 1) {
+          redirectAttributes.addFlashAttribute("success", Message.CREDENTIALS_UPDATED.getText());
+        }
+        else {
+          redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ERROR.getText());
+        }
+
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ERROR.getText());
       }
 
     }
@@ -65,30 +78,48 @@ public class CredentialsController {
 
       int r = credentialsService.createCredentials(credentials);
 
+      if (r > 0) {
+        redirectAttributes.addFlashAttribute("success", Message.CREDENTIALS_ADDED.getText());
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ERROR.getText());
+      }
+
 
     }
 
 
 
 
-    response.sendRedirect("/home");
+    return "redirect:/home";
   }
 
   @GetMapping("deleteCredentials/{id}")
-  public void deleteCredentials(Model model,
-                                Principal principal,
-                                HttpServletResponse response,
-                                @PathVariable("id") Long credentialsId) throws IOException {
+  public String deleteCredentials(Model model,
+                                  Principal principal,
+                                  HttpServletResponse response,
+                                  @PathVariable("id") Long credentialsId,
+                                  RedirectAttributes redirectAttributes) throws IOException {
 
     User user = userService.getByUsername(principal.getName());
 
     Credentials credentials = credentialsService.getById(credentialsId);
 
     if (credentials.getUserid().equals(user.getUserid())) {
-      credentialsService.delete(credentialsId);
+      int r = credentialsService.delete(credentialsId);
+
+      if (r > 0) {
+        redirectAttributes.addFlashAttribute("success", Message.CREDENTIALS_DELETED.getText());
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ERROR.getText());
+      }
+    }
+    else {
+      redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ERROR.getText());
     }
 
-    response.sendRedirect("/home");
+    return "redirect:/home";
 
   }
 
