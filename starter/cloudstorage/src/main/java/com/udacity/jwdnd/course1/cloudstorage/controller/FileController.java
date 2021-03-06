@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -82,36 +83,54 @@ public class FileController {
   }
 
   @PostMapping("/file")
-  public void uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile,
+  public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile,
                          Principal principal,
                          Model model,
-                         HttpServletResponse response
-                         ) throws IOException {
+                         HttpServletResponse response,
+                         RedirectAttributes redirectAttributes
+                         )  {
 
 
     User user = userService.getByUsername(principal.getName());
+
+    if (fileNameAlreadyExists(user, multipartFile.getOriginalFilename())) {
+      redirectAttributes.addFlashAttribute("error", Message.FILE_ALREADY_EXISTS.getText());
+      return "redirect:/home";
+    }
 
 
     try {
       File file = fromMultipartFile(multipartFile, user);
 
 
-      fileService.addFile(file);
+      int r = fileService.addFile(file);
+
+      if (r > 0) {
+        redirectAttributes.addFlashAttribute("success", Message.FILE_UPLOADED.getText());
+      }
+      else {
+        redirectAttributes.addFlashAttribute("error", Message.FILE_ERROR_UPLOADING.getText());
+      }
 
 
     } catch (IOException e) {
 
-      Cookie cookie = new Cookie("redirectMessage", "FILE_ERROR");
-      cookie.setMaxAge(5);
-      response.addCookie(cookie);
+      redirectAttributes.addFlashAttribute("error", Message.FILE_ERROR_UPLOADING.getText());
+
+
     }
 
-    response.sendRedirect("/home");
+    return "redirect:/home";
 
 
   }
 
   private File fromMultipartFile(MultipartFile mpf, User user) throws IOException {
     return new File(null, mpf.getOriginalFilename(), mpf.getContentType(), mpf.getSize()+"", user.getUserid(), mpf.getBytes());
+  }
+
+  private boolean fileNameAlreadyExists(User user, String fileName) {
+    return fileService.getFiles(user.getUserid()).stream()
+            .anyMatch(f -> f.getFileName().equals(fileName));
   }
 }

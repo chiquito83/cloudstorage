@@ -47,10 +47,7 @@ public class NoteController {
 
       if (user.getUserid().equals(existingNote.getUserid())) {
 
-        if (titleAlreadyExists(user, noteForm.getTitle())) {
-          redirectAttributes.addFlashAttribute("error", Message.NOTE_ALREADY_EXISTS.getText());
-          return "redirect:/home";
-        }
+
 
         Note updatedNote = new Note(noteForm.getId(), noteForm.getTitle(), noteForm.getDescription(), existingNote.getUserid());
         int rows = noteService.update(updatedNote);
