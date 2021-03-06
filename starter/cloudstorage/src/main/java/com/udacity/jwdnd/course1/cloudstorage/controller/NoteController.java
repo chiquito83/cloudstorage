@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class NoteController {
@@ -45,6 +46,12 @@ public class NoteController {
     if (existingNote != null) {
 
       if (user.getUserid().equals(existingNote.getUserid())) {
+
+        if (titleAlreadyExists(user, noteForm.getTitle())) {
+          redirectAttributes.addFlashAttribute("error", Message.NOTE_ALREADY_EXISTS.getText());
+          return "redirect:/home";
+        }
+
         Note updatedNote = new Note(noteForm.getId(), noteForm.getTitle(), noteForm.getDescription(), existingNote.getUserid());
         int rows = noteService.update(updatedNote);
 
@@ -57,7 +64,14 @@ public class NoteController {
 
     } else {
 
+      if (titleAlreadyExists(user, noteForm.getTitle())) {
+        redirectAttributes.addFlashAttribute("error", Message.NOTE_ALREADY_EXISTS.getText());
+        return "redirect:/home";
+      }
+
       Note note = user.createNote(noteForm.getTitle(), noteForm.getDescription());
+
+
 
       int r = noteService.createNote(note);
 
@@ -95,15 +109,15 @@ public class NoteController {
       int r = noteService.deleteNote(note.getNoteid());
 
       if (r > 0) {
-        redirectAttributes.addFlashAttribute("success", Message.NOTE_DELETED);
+        redirectAttributes.addFlashAttribute("success", Message.NOTE_DELETED.getText());
       }
       else {
-        redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+        redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR.getText());
       }
 
     }
     else {
-      redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR);
+      redirectAttributes.addFlashAttribute("error", Message.NOTE_ERROR.getText());
     }
 
 
@@ -111,6 +125,15 @@ public class NoteController {
     return "redirect:/home";
 
   }
+
+  private boolean titleAlreadyExists(User user, String title) {
+    List<Note> notes = noteService.getNotes(user.getUserid());
+
+    return notes.stream().anyMatch(n -> n.getTitle().equals(title));
+
+  }
+
+
 
 
 }
