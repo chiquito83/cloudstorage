@@ -50,6 +50,12 @@ public class NoteController {
 
 
         Note updatedNote = new Note(noteForm.getId(), noteForm.getTitle(), noteForm.getDescription(), existingNote.getUserid());
+
+        if (titleAlreadyExists(user, noteForm.getTitle(), existingNote)) {
+          redirectAttributes.addFlashAttribute("error", Message.NOTE_ALREADY_EXISTS.getText());
+          return "redirect:/home";
+        }
+
         int rows = noteService.update(updatedNote);
 
         if (rows > 0) {
@@ -61,7 +67,7 @@ public class NoteController {
 
     } else {
 
-      if (titleAlreadyExists(user, noteForm.getTitle())) {
+      if (titleAlreadyExists(user, noteForm.getTitle(), existingNote)) {
         redirectAttributes.addFlashAttribute("error", Message.NOTE_ALREADY_EXISTS.getText());
         return "redirect:/home";
       }
@@ -94,7 +100,7 @@ public class NoteController {
                          @PathVariable("id") Long noteId,
                          HttpServletResponse response,
                          RedirectAttributes redirectAttributes
-  ) throws IOException {
+  )  {
 
 
     User user = userService.getByUsername(principal.getName());
@@ -123,10 +129,31 @@ public class NoteController {
 
   }
 
-  private boolean titleAlreadyExists(User user, String title) {
+  /**
+   * Helper method to check if title already exists
+   * @param user
+   * @param title
+   * @param noteToBeUpdated
+   * @return true if title exists unless it exists in the noteToBeUpdated
+   */
+  private boolean titleAlreadyExists(User user, String title, Note noteToBeUpdated) {
     List<Note> notes = noteService.getNotes(user.getUserid());
 
-    return notes.stream().anyMatch(n -> n.getTitle().equals(title));
+    boolean b = notes.stream().anyMatch(n -> n.getTitle().equals(title));
+
+    if (null == noteToBeUpdated) {
+      return b;
+    }
+
+    else {
+      return !notes.stream().filter(n -> n.getTitle()
+              .equals(title)).allMatch(n -> n.getNoteid().equals(noteToBeUpdated.getNoteid()));
+
+
+    }
+
+
+
 
   }
 

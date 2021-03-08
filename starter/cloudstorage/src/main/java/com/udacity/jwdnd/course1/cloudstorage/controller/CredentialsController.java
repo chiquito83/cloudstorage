@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class CredentialsController {
@@ -120,6 +121,13 @@ public class CredentialsController {
     }
 
     return "redirect:/home";
+
+  }
+
+  private boolean urlAlreadyExists(User user, String url) {
+    List<Credentials> credentialsList = credentialsService.getCredentials(user.getUserid());
+
+    return credentialsList.stream().anyMatch(c -> c.getUrl().equals(url));
 
   }
 
