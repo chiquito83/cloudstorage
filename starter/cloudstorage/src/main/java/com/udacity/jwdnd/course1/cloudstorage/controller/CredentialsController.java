@@ -38,7 +38,7 @@ public class CredentialsController {
                               Model model, Principal principal,
                               HttpServletResponse response,
                                 RedirectAttributes redirectAttributes
-                              ) throws IOException {
+                              )  {
 
 
     User user = userService.getByUsername(principal.getName());
@@ -54,6 +54,11 @@ public class CredentialsController {
                 credentialsForm.getUrl(), credentialsForm.getUsername(),
                 credentialsForm.getPassword(), existingCredentials.getKey(), user.getUserid()
                  );
+
+        if (urlAlreadyExists(user, credentialsForm.getUrl(), existingCredentials)) {
+          redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ALREADY_EXIST.getText());
+          return "redirect:/home";
+        }
 
         int r = credentialsService.delete(credentialsForm.getId());
         int rr = credentialsService.createCredentials(updated);
@@ -76,6 +81,11 @@ public class CredentialsController {
 
       Credentials credentials = user.createCredentials(credentialsForm.getUrl(),
               credentialsForm.getUsername(), credentialsForm.getPassword());
+
+      if (urlAlreadyExists(user, credentialsForm.getUrl(), existingCredentials)) {
+        redirectAttributes.addFlashAttribute("error", Message.CREDENTIALS_ALREADY_EXIST.getText());
+        return "redirect:/home";
+      }
 
       int r = credentialsService.createCredentials(credentials);
 
@@ -124,10 +134,18 @@ public class CredentialsController {
 
   }
 
-  private boolean urlAlreadyExists(User user, String url) {
+  private boolean urlAlreadyExists(User user, String url, Credentials existingCredentials) {
     List<Credentials> credentialsList = credentialsService.getCredentials(user.getUserid());
 
-    return credentialsList.stream().anyMatch(c -> c.getUrl().equals(url));
+    boolean b = credentialsList.stream().anyMatch(c -> c.getUrl().equals(url));
+
+    if (null == existingCredentials) {
+      return b;
+    }
+    else {
+      return !credentialsList.stream().filter(c -> c.getUrl().equals(url))
+              .allMatch(c -> c.getCredentialid().equals(existingCredentials.getCredentialid()));
+    }
 
   }
 
