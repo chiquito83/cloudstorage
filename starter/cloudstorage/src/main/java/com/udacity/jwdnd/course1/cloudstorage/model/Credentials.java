@@ -11,6 +11,8 @@ public class Credentials {
 
   private Long userid;
 
+  private String encodedPassword;
+
   public Credentials(Long id, String url, String username, String password, String key, Long userid) {
     this.credentialid = id;
     this.url = url;
@@ -67,6 +69,14 @@ public class Credentials {
 
   public void setUserid(Long userid) {
     this.userid = userid;
+  }
+
+  public void setEncodedPassword() {
+    encodedPassword = this.password;
+  }
+
+  public String getEncodedPassword() {
+    return encodedPassword;
   }
 
   @Override

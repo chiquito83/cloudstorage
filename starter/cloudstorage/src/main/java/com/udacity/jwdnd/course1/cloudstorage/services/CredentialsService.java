@@ -86,6 +86,8 @@ public class CredentialsService {
 
     String password = encryptionService.decryptValue(encrypted, key);
 
+    credentials.setEncodedPassword();
+
     credentials.setPassword(password);
 
     return credentials;
