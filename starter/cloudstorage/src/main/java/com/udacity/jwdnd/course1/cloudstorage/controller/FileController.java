@@ -98,6 +98,11 @@ public class FileController {
       return "redirect:/home";
     }
 
+    if (multipartFile.isEmpty()) {
+      redirectAttributes.addFlashAttribute("error", Message.FILE_NOT_CHOSEN.getText());
+      return "redirect:/home";
+    }
+
 
     try {
       File file = fromMultipartFile(multipartFile, user);
