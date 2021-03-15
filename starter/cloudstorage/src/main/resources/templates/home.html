@@ -15,17 +15,17 @@
                     <button type="submit" class="btn btn-secondary float-right" id="logoutButton">Logout</button>
                 </form>
 
-                <div class="alert alert-danger" th:if="${error}" th:text="${error}">
-                    Error message
+            </div>
 
-                </div>
-                <div class="alert alert-dark" th:if="${success}" th:text="${success}">
-                    Success message
-
-                </div>
-
+            <div class="alert alert-danger" th:if="${error}" th:text="${error}">
+                Error message
 
             </div>
+            <div class="alert alert-dark" th:if="${success}" th:text="${success}">
+                Success message
+
+            </div>
+
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
