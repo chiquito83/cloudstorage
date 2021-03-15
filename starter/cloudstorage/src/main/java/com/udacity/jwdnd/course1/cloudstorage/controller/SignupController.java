@@ -38,7 +38,6 @@ public class SignupController {
                                RedirectAttributes redirectAttributes
                                ) throws IOException {
 
-    System.out.println(signupForm);
 
 
     boolean noErrors = true;
