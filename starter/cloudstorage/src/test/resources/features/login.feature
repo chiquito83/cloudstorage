@@ -1,4 +1,4 @@
-Feature: Users can register and login
+Feature: Signup and Login
 
   Scenario:   Home page not accessible without login
 
