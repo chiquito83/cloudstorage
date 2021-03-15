@@ -171,4 +171,81 @@ public class MyStepdefs extends SpringTest {
             "Expected an exception as element should not be found"
     );
   }
+
+  @When("user adds credentials for url {string}")
+  public void userAddsCredentialsForUrl(String url) throws InterruptedException {
+
+    HomePage homePage = new HomePage(driver);
+
+    Thread.sleep(2000);
+
+    homePage.clickCredentialsTab();
+
+    Thread.sleep(2000);
+
+    homePage.addCredentials(url, "sajhsd", "sps@£@");
+
+
+
+  }
+
+  @Then("credentials for {string} url are visible")
+  public void credentialsForUrlAreVisible(String arg0) throws InterruptedException {
+
+    HomePage homePage = new HomePage(driver);
+
+    Thread.sleep(2000);
+
+    homePage.clickCredentialsTab();
+
+    Thread.sleep(2000);
+
+    assertEquals(arg0, homePage.getCredentialsUrl());
+  }
+
+  @When("user changes the url to {string}")
+  public void userChangesTheUrlTo(String url) throws InterruptedException {
+
+    HomePage homePage = new HomePage(driver);
+
+    Thread.sleep(2000);
+
+    homePage.clickCredentialsTab();
+
+    Thread.sleep(2000);
+
+    homePage.editCredentialsChangeUrl(url);
+  }
+
+  @When("user deletes the credentials")
+  public void userDeletesTheCredentials() throws InterruptedException {
+
+    HomePage homePage = new HomePage(driver);
+
+    Thread.sleep(2000);
+
+    homePage.clickCredentialsTab();
+
+    Thread.sleep(2000);
+
+    homePage.deleteCredentials();
+  }
+
+  @Then("credentials do not exist")
+  public void credentialsDoNotExist() throws InterruptedException {
+    HomePage homePage = new HomePage(driver);
+
+    Thread.sleep(2000);
+
+    homePage.clickCredentialsTab();
+
+
+    Thread.sleep(2000);
+
+    NoSuchElementException e = assertThrows(
+            NoSuchElementException.class,
+            () -> homePage.getCredentialsUrl(),
+            "Expected an exception as element should not be found"
+    );
+  }
 }
